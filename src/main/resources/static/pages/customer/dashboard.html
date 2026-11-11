@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Dashboard - FTM System</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="/css/app.css">
+</head>
+<body>
+
+<!-- Sidebar (Customer Version) -->
+<div class="sidebar">
+    <div class="brand"><i class="bi bi-bank2 text-primary me-2"></i> FTM Bank</div>
+    <div class="nav flex-column mt-3">
+        <a class="nav-item active" href="/pages/customer/dashboard.html"><i class="bi bi-grid-1x2"></i> My Dashboard</a>
+        <a class="nav-item mt-5 text-danger" id="logoutBtn" style="cursor: pointer;"><i class="bi bi-box-arrow-right"></i> Logout</a>
+    </div>
+</div>
+
+<!-- Main Content -->
+<div class="main-content">
+    <div class="topbar">
+        <h5 class="m-0 fw-bold text-dark">Welcome, <span id="customerName">Loading...</span></h5>
+        <div class="d-flex align-items-center gap-3">
+            <div class="avatar bg-primary text-white rounded-circle d-flex align-items-center justify-content-center fw-bold" style="width: 40px; height: 40px;">U</div>
+        </div>
+    </div>
+
+    <div class="container-fluid p-4">
+        
+        <!-- Summary Cards -->
+        <div class="row g-4 mb-4">
+            <div class="col-md-4">
+                <div class="stat-card bg-primary text-white">
+                    <h6 class="opacity-75 mb-1">Total Balance (All Accounts)</h6>
+                    <h2 class="mb-0 fw-bold" id="totalBalance">LKR 0.00</h2>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="stat-card d-flex align-items-center">
+                    <div class="icon-box bg-info bg-opacity-10 text-info me-3"><i class="bi bi-arrow-down-circle"></i></div>
+                    <div>
+                        <h6 class="text-muted mb-1">Lifetime Deposits</h6>
+                        <h3 class="mb-0 fw-bold text-dark" id="totalDeposits">LKR 0.00</h3>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="stat-card d-flex align-items-center">
+                    <div class="icon-box bg-danger bg-opacity-10 text-danger me-3"><i class="bi bi-arrow-up-circle"></i></div>
+                    <div>
+                        <h6 class="text-muted mb-1">Lifetime Withdrawals</h6>
+                        <h3 class="mb-0 fw-bold text-dark" id="totalWithdrawals">LKR 0.00</h3>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- My Accounts -->
+        <div class="row g-4 mb-4">
+            <div class="col-12">
+                <div class="stat-card">
+                    <h5 class="fw-bold mb-4">My Bank Accounts</h5>
+                    <div class="row g-3" id="accountsContainer">
+                        <div class="text-center py-4 text-muted"><div class="spinner-border spinner-border-sm me-2"></div> Loading accounts...</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script src="/js/app.js"></script>
+<script src="/js/customer-dashboard.js"></script>
+</body>
+</html>

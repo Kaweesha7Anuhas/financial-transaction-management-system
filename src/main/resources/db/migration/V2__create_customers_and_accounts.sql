@@ -1,0 +1,33 @@
+-- V2__create_customers_and_accounts.sql
+
+CREATE TABLE customers (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    customer_code VARCHAR(20) NOT NULL UNIQUE,
+    first_name VARCHAR(50) NOT NULL,
+    last_name VARCHAR(50) NOT NULL,
+    email VARCHAR(100) NOT NULL UNIQUE,
+    phone_number VARCHAR(20),
+    address VARCHAR(255),
+    city VARCHAR(100),
+    date_of_birth DATE,
+    status VARCHAR(20) NOT NULL DEFAULT 'ACTIVE',
+    user_id BIGINT UNIQUE,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    CONSTRAINT fk_customer_user FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE SET NULL
+);
+
+CREATE TABLE accounts (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    account_number VARCHAR(20) NOT NULL UNIQUE,
+    account_type VARCHAR(20) NOT NULL,
+    account_name VARCHAR(100) NOT NULL,
+    balance DECIMAL(19,4) NOT NULL DEFAULT 0.0000,
+    currency VARCHAR(3) NOT NULL DEFAULT 'LKR',
+    status VARCHAR(20) NOT NULL DEFAULT 'ACTIVE',
+    version BIGINT DEFAULT 0,
+    customer_id BIGINT NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    CONSTRAINT fk_account_customer FOREIGN KEY (customer_id) REFERENCES customers(id) ON DELETE RESTRICT
+);
