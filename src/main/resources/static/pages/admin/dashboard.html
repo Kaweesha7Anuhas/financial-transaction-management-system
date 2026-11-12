@@ -1,123 +1,263 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-bs-theme="light">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Dashboard - FTM System</title>
+    <title>Admin Dashboard · FTM System</title>
+
+    <!-- No-flash theme bootstrap -->
+    <script>
+        (function () {
+            var t = null;
+            try { t = localStorage.getItem('ftm-theme'); } catch (e) {}
+            if (!t) {
+                t = (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches)
+                    ? 'dark' : 'light';
+            }
+            document.documentElement.setAttribute('data-bs-theme', t);
+        })();
+    </script>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
     <link rel="stylesheet" href="/css/app.css">
 </head>
 <body>
 
-<!-- Sidebar -->
-<div class="sidebar">
-    <div class="brand">
-        <i class="bi bi-bank2 text-primary me-2"></i> FTM System
-    </div>
-    <div class="nav flex-column mt-3">
-        <a class="nav-item active" href="/pages/admin/dashboard.html"><i class="bi bi-grid-1x2"></i> Dashboard</a>
-        <a class="nav-item" href="/pages/admin/customers.html"><i class="bi bi-people"></i> Customers</a>
-        <a class="nav-item" href="/pages/admin/accounts.html"><i class="bi bi-credit-card"></i> Accounts</a>
-        <a class="nav-item" href="/pages/admin/transactions.html"><i class="bi bi-arrow-left-right"></i> Process Tx</a>
-        <a class="nav-item" href="/pages/admin/transaction-history.html"><i class="bi bi-clock-history"></i> Tx History</a>
-        <a class="nav-item" href="/pages/admin/reports.html"><i class="bi bi-bar-chart"></i> Reports</a>
-        <a class="nav-item" href="/pages/admin/users.html"><i class="bi bi-person-gear"></i> Staff Management</a>
-        <a class="nav-item" href="/pages/admin/audit-logs.html"><i class="bi bi-shield-check"></i> Audit Logs</a>
-        <a class="nav-item mt-5 text-danger" id="logoutBtn" style="cursor: pointer;"><i class="bi bi-box-arrow-right"></i> Logout</a>
-    </div>
+<div class="app-shell">
+
+    <!-- ==================== SIDEBAR ==================== -->
+    <aside class="sidebar" id="appSidebar" aria-label="Primary navigation">
+        <div class="brand">
+            <span class="brand-mark"><i class="bi bi-bank2"></i></span>
+            <span class="brand-text">FTM System</span>
+        </div>
+
+        <nav class="nav">
+            <div class="nav-section">Workspace</div>
+
+            <a class="nav-item active" href="/pages/admin/dashboard.html">
+                <i class="bi bi-grid-1x2"></i><span class="nav-label">Dashboard</span>
+            </a>
+            <a class="nav-item" href="/pages/admin/customers.html">
+                <i class="bi bi-people"></i><span class="nav-label">Customers</span>
+            </a>
+            <a class="nav-item" href="/pages/admin/accounts.html">
+                <i class="bi bi-credit-card"></i><span class="nav-label">Accounts</span>
+            </a>
+            <a class="nav-item" href="/pages/admin/transactions.html">
+                <i class="bi bi-arrow-left-right"></i><span class="nav-label">Process Tx</span>
+            </a>
+            <a class="nav-item" href="/pages/admin/transaction-history.html">
+                <i class="bi bi-clock-history"></i><span class="nav-label">Tx History</span>
+            </a>
+
+            <div class="nav-section">Insights</div>
+
+            <a class="nav-item" href="/pages/admin/reports.html">
+                <i class="bi bi-bar-chart"></i><span class="nav-label">Reports</span>
+            </a>
+            <a class="nav-item" href="/pages/admin/users.html">
+                <i class="bi bi-person-gear"></i><span class="nav-label">Staff Management</span>
+            </a>
+            <a class="nav-item" href="/pages/admin/audit-logs.html">
+                <i class="bi bi-shield-check"></i><span class="nav-label">Audit Logs</span>
+            </a>
+        </nav>
+
+        <div class="sidebar-footer">
+            <a class="nav-item text-danger" id="logoutBtn" role="button" style="cursor:pointer;">
+                <i class="bi bi-box-arrow-right"></i><span class="nav-label">Logout</span>
+            </a>
+        </div>
+    </aside>
+    <div class="sidebar-backdrop" aria-hidden="true"></div>
+
+    <!-- ==================== MAIN ==================== -->
+    <main class="main-content">
+
+        <!-- Topbar -->
+        <header class="topbar">
+            <div class="topbar-left">
+                <button type="button" class="sidebar-toggle" aria-label="Toggle sidebar">
+                    <i class="bi bi-list"></i>
+                </button>
+                <div>
+                    <h1 class="page-title">Overview</h1>
+                    <p class="page-subtitle d-none d-sm-block">Administrator dashboard</p>
+                </div>
+            </div>
+
+            <div class="topbar-right">
+                <button type="button" class="theme-toggle" aria-label="Toggle dark mode">
+                    <i class="bi bi-moon-stars icon-moon"></i>
+                    <i class="bi bi-sun icon-sun"></i>
+                </button>
+
+                <div class="dropdown">
+                    <button class="user-menu" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        <span class="user-avatar" id="userInitial">A</span>
+                        <span class="user-meta">
+                            <span class="user-name" id="adminName">Loading…</span>
+                            <span class="user-role">Administrator</span>
+                        </span>
+                        <i class="bi bi-chevron-down ms-1" style="font-size:.72rem;"></i>
+                    </button>
+                    <ul class="dropdown-menu dropdown-menu-end">
+                        <li>
+                            <a class="dropdown-item" href="#">
+                                <i class="bi bi-person me-2"></i>Profile
+                            </a>
+                        </li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li>
+                            <a class="dropdown-item text-danger js-logout" href="#" role="button">
+                                <i class="bi bi-box-arrow-right me-2"></i>Sign out
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </header>
+
+        <!-- Content -->
+        <div class="content-inner">
+
+            <!-- ============ Stat cards ============ -->
+            <div class="row g-3 g-md-4 mb-4 stagger">
+
+                <div class="col-sm-6 col-xl-3">
+                    <div class="stat-card">
+                        <div class="stat-head">
+                            <p class="stat-label">Total customers</p>
+                            <span class="stat-icon"><i class="bi bi-people"></i></span>
+                        </div>
+                        <div class="stat-value" id="totalCustomers">0</div>
+                        <div class="stat-foot">
+                            <i class="bi bi-person-check"></i>
+                            <span>Registered users</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-sm-6 col-xl-3">
+                    <div class="stat-card">
+                        <div class="stat-head">
+                            <p class="stat-label">Total accounts</p>
+                            <span class="stat-icon icon-success"><i class="bi bi-credit-card"></i></span>
+                        </div>
+                        <div class="stat-value" id="totalAccounts">0</div>
+                        <div class="stat-foot">
+                            <i class="bi bi-wallet2"></i>
+                            <span>Open accounts</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-sm-6 col-xl-3">
+                    <div class="stat-card">
+                        <div class="stat-head">
+                            <p class="stat-label">Total deposits</p>
+                            <span class="stat-icon icon-info"><i class="bi bi-arrow-down-circle"></i></span>
+                        </div>
+                        <div class="stat-value" id="totalDeposits">LKR 0.00</div>
+                        <div class="stat-foot">
+                            <i class="bi bi-graph-up-arrow"></i>
+                            <span>Inflow volume</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-sm-6 col-xl-3">
+                    <div class="stat-card">
+                        <div class="stat-head">
+                            <p class="stat-label">Total withdrawals</p>
+                            <span class="stat-icon icon-danger"><i class="bi bi-arrow-up-circle"></i></span>
+                        </div>
+                        <div class="stat-value" id="totalWithdrawals">LKR 0.00</div>
+                        <div class="stat-foot">
+                            <i class="bi bi-graph-down-arrow"></i>
+                            <span>Outflow volume</span>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- ============ Charts row ============ -->
+            <div class="row g-3 g-md-4">
+
+                <!-- Transaction chart -->
+                <div class="col-lg-8">
+                    <section class="card chart-card h-100">
+                        <div class="chart-head">
+                            <div>
+                                <h2 class="chart-title">Transaction volume</h2>
+                                <p class="chart-sub">Deposits and withdrawals over time</p>
+                            </div>
+                            <div>
+                                <label for="chartType" class="visually-hidden">Chart range</label>
+                                <select class="form-select form-select-sm" id="chartType" style="min-width: 180px;">
+                                    <option value="daily">Daily (Past 7 days)</option>
+                                    <option value="monthly">Monthly</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <!-- Fixed-height, position:relative wrapper — matches original requirement -->
+                        <div class="chart-wrap" id="transactionChartWrap" style="position:relative;">
+                            <canvas id="transactionChart"></canvas>
+
+                            <!-- Loading / empty / error overlay (toggled by JS) -->
+                            <div class="empty-state" id="chartOverlay"
+                                 style="position:absolute; inset:0; background:var(--ftm-surface); display:flex; flex-direction:column; align-items:center; justify-content:center;">
+                                <div class="spinner-border text-primary" role="status" aria-hidden="true"></div>
+                                <p class="text-muted mt-3 mb-0" style="font-size:.875rem;">Loading chart…</p>
+                            </div>
+                        </div>
+                    </section>
+                </div>
+
+                <!-- Cashier performance -->
+                <div class="col-lg-4">
+                    <section class="card chart-card h-100 d-flex flex-column">
+                        <div class="chart-head">
+                            <div>
+                                <h2 class="chart-title">Cashier performance</h2>
+                                <p class="chart-sub">Top volume leaders</p>
+                            </div>
+                            <span class="badge badge-soft-primary">
+                                <i class="bi bi-trophy me-1"></i> Leaderboard
+                            </span>
+                        </div>
+
+                        <!-- #cashierPerformanceList kept as the injection target -->
+                        <ul class="leaderboard flex-grow-1" id="cashierPerformanceList">
+                            <li style="display:block; border:0; padding: 2rem 0; text-align:center;">
+                                <div class="spinner-border spinner-border-sm text-primary" role="status" aria-hidden="true"></div>
+                                <p class="text-muted mt-2 mb-0" style="font-size:.875rem;">Loading performance…</p>
+                            </li>
+                        </ul>
+                    </section>
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- Footer -->
+        <footer class="app-footer">
+            <span>&copy; 2026 FTM System. All rights reserved.</span>
+            <span class="text-muted-2">v1.0 · Admin</span>
+        </footer>
+
+    </main>
 </div>
 
-<!-- Main Content -->
-<div class="main-content">
-    <!-- Topbar -->
-    <div class="topbar">
-        <h5 class="m-0 fw-bold text-dark">Overview</h5>
-        <div class="d-flex align-items-center gap-3">
-            <span class="fw-semibold text-muted" id="adminName">Loading...</span>
-            <div class="avatar bg-primary text-white rounded-circle d-flex align-items-center justify-content-center fw-bold" style="width: 40px; height: 40px;">
-                A
-            </div>
-        </div>
-    </div>
-
-    <!-- Dashboard Content -->
-    <div class="container-fluid p-4">
-        
-        <!-- Stat Cards -->
-        <div class="row g-4 mb-4">
-            <div class="col-md-3">
-                <div class="stat-card d-flex align-items-center">
-                    <div class="icon-box bg-primary bg-opacity-10 text-primary me-3"><i class="bi bi-people"></i></div>
-                    <div>
-                        <h6 class="text-muted mb-1">Total Customers</h6>
-                        <h3 class="mb-0 fw-bold" id="totalCustomers">0</h3>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-3">
-                <div class="stat-card d-flex align-items-center">
-                    <div class="icon-box bg-success bg-opacity-10 text-success me-3"><i class="bi bi-credit-card"></i></div>
-                    <div>
-                        <h6 class="text-muted mb-1">Total Accounts</h6>
-                        <h3 class="mb-0 fw-bold" id="totalAccounts">0</h3>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-3">
-                <div class="stat-card d-flex align-items-center">
-                    <div class="icon-box bg-info bg-opacity-10 text-info me-3"><i class="bi bi-arrow-down-circle"></i></div>
-                    <div>
-                        <h6 class="text-muted mb-1">Total Deposits</h6>
-                        <h3 class="mb-0 fw-bold" id="totalDeposits">0.00</h3>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-3">
-                <div class="stat-card d-flex align-items-center">
-                    <div class="icon-box bg-danger bg-opacity-10 text-danger me-3"><i class="bi bi-arrow-up-circle"></i></div>
-                    <div>
-                        <h6 class="text-muted mb-1">Total Withdrawals</h6>
-                        <h3 class="mb-0 fw-bold" id="totalWithdrawals">0.00</h3>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Charts Row -->
-        <div class="row g-4">
-            <!-- Chart -->
-            <div class="col-md-8">
-                <div class="stat-card h-100">
-                    <div class="d-flex justify-content-between align-items-center mb-4">
-                        <h5 class="fw-bold m-0">Transaction Volume</h5>
-                        <select class="form-select w-auto" id="chartType">
-                            <option value="daily">Daily (Past 7 days)</option>
-                            <option value="monthly">Monthly</option>
-                        </select>
-                    </div>
-                    <!-- FIXED CHART CONTAINER -->
-                    <div style="position: relative; height: 320px; width: 100%;">
-                        <canvas id="transactionChart"></canvas>
-                    </div>
-                </div>
-            </div>
-            
-            <!-- Cashier Performance -->
-            <div class="col-md-4">
-                <div class="stat-card h-100">
-                    <h5 class="fw-bold mb-4">Cashier Performance</h5>
-                    <div class="list-group list-group-flush" id="cashierPerformanceList">
-                        <!-- Data injected via JS -->
-                        <div class="text-center py-4 text-muted"><div class="spinner-border spinner-border-sm me-2"></div> Loading...</div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-    </div>
-</div>
-
+<!-- ==================== Scripts ==================== -->
 <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>

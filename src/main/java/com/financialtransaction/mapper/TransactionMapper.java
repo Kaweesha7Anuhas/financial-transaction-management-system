@@ -17,6 +17,7 @@ public class TransactionMapper {
         response.setBalanceAfter(tx.getBalanceAfter());
         response.setStatus(tx.getStatus());
         response.setDescription(tx.getDescription());
+        response.setPerformedBy(tx.getPerformedBy() != null ? tx.getPerformedBy().getUsername() : "System");
         response.setTransactionDate(tx.getTransactionDate());
         return response;
     }

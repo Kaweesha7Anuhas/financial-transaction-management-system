@@ -15,6 +15,7 @@ public class TransactionResponse {
     private BigDecimal balanceAfter;
     private TransactionStatus status;
     private String description;
+    private String performedBy;
     private LocalDateTime transactionDate;
 
     // Getters and Setters
@@ -44,6 +45,9 @@ public class TransactionResponse {
 
     public String getDescription() { return description; }
     public void setDescription(String description) { this.description = description; }
+
+    public String getPerformedBy() { return performedBy; }
+    public void setPerformedBy(String performedBy) { this.performedBy = performedBy; }
 
     public LocalDateTime getTransactionDate() { return transactionDate; }
     public void setTransactionDate(LocalDateTime transactionDate) { this.transactionDate = transactionDate; }

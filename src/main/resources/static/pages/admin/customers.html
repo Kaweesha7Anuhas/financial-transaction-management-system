@@ -1,118 +1,273 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-bs-theme="light">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Customers - FTM System</title>
+    <title>Customers · FTM System</title>
+
+    <!-- No-flash theme bootstrap -->
+    <script>
+        (function () {
+            var t = null;
+            try { t = localStorage.getItem('ftm-theme'); } catch (e) {}
+            if (!t) {
+                t = (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches)
+                    ? 'dark' : 'light';
+            }
+            document.documentElement.setAttribute('data-bs-theme', t);
+        })();
+    </script>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
     <link rel="stylesheet" href="/css/app.css">
 </head>
 <body>
 
-<!-- Sidebar -->
-<div class="sidebar">
-    <div class="brand"><i class="bi bi-bank2 text-primary me-2"></i> FTM System</div>
-    <div class="nav flex-column mt-3">
-        <a class="nav-item" href="/pages/admin/dashboard.html"><i class="bi bi-grid-1x2"></i> Dashboard</a>
-        <a class="nav-item active" href="/pages/admin/customers.html"><i class="bi bi-people"></i> Customers</a>
-        <a class="nav-item" href="/pages/admin/accounts.html"><i class="bi bi-credit-card"></i> Accounts</a>
-        <a class="nav-item" href="/pages/admin/transactions.html"><i class="bi bi-arrow-left-right"></i> Process Tx</a>
-        <a class="nav-item" href="/pages/admin/transaction-history.html"><i class="bi bi-clock-history"></i> Tx History</a>
-        <a class="nav-item" href="/pages/admin/reports.html"><i class="bi bi-bar-chart"></i> Reports</a>
-        <a class="nav-item" href="/pages/admin/users.html"><i class="bi bi-person-gear"></i> Staff Management</a>
-        <a class="nav-item" href="/pages/admin/audit-logs.html"><i class="bi bi-shield-check"></i> Audit Logs</a>
-        <a class="nav-item mt-5 text-danger" id="logoutBtn" style="cursor: pointer;"><i class="bi bi-box-arrow-right"></i> Logout</a>
-    </div>
+<div class="app-shell">
+
+    <!-- ==================== SIDEBAR ==================== -->
+    <aside class="sidebar" id="appSidebar" aria-label="Primary navigation">
+        <div class="brand">
+            <span class="brand-mark"><i class="bi bi-bank2"></i></span>
+            <span class="brand-text">FTM System</span>
+        </div>
+
+        <nav class="nav">
+            <div class="nav-section">Workspace</div>
+            <a class="nav-item" href="/pages/admin/dashboard.html">
+                <i class="bi bi-grid-1x2"></i><span class="nav-label">Dashboard</span>
+            </a>
+            <a class="nav-item active" href="/pages/admin/customers.html">
+                <i class="bi bi-people"></i><span class="nav-label">Customers</span>
+            </a>
+            <a class="nav-item" href="/pages/admin/accounts.html">
+                <i class="bi bi-credit-card"></i><span class="nav-label">Accounts</span>
+            </a>
+            <a class="nav-item" href="/pages/admin/transactions.html">
+                <i class="bi bi-arrow-left-right"></i><span class="nav-label">Process Tx</span>
+            </a>
+            <a class="nav-item" href="/pages/admin/transaction-history.html">
+                <i class="bi bi-clock-history"></i><span class="nav-label">Tx History</span>
+            </a>
+
+            <div class="nav-section">Insights</div>
+            <a class="nav-item" href="/pages/admin/reports.html">
+                <i class="bi bi-bar-chart"></i><span class="nav-label">Reports</span>
+            </a>
+            <a class="nav-item" href="/pages/admin/users.html">
+                <i class="bi bi-person-gear"></i><span class="nav-label">Staff Management</span>
+            </a>
+            <a class="nav-item" href="/pages/admin/audit-logs.html">
+                <i class="bi bi-shield-check"></i><span class="nav-label">Audit Logs</span>
+            </a>
+        </nav>
+
+        <div class="sidebar-footer">
+            <a class="nav-item text-danger" id="logoutBtn" role="button" style="cursor:pointer;">
+                <i class="bi bi-box-arrow-right"></i><span class="nav-label">Logout</span>
+            </a>
+        </div>
+    </aside>
+    <div class="sidebar-backdrop" aria-hidden="true"></div>
+
+    <!-- ==================== MAIN ==================== -->
+    <main class="main-content">
+
+        <header class="topbar">
+            <div class="topbar-left">
+                <button type="button" class="sidebar-toggle" aria-label="Toggle sidebar">
+                    <i class="bi bi-list"></i>
+                </button>
+                <div>
+                    <h1 class="page-title">Customer Management</h1>
+                    <p class="page-subtitle d-none d-sm-block">Manage all registered customers</p>
+                </div>
+            </div>
+
+            <div class="topbar-right">
+                <button type="button" class="theme-toggle" aria-label="Toggle dark mode">
+                    <i class="bi bi-moon-stars icon-moon"></i>
+                    <i class="bi bi-sun icon-sun"></i>
+                </button>
+
+                <div class="dropdown">
+                    <button class="user-menu" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        <span class="user-avatar" id="userInitial">A</span>
+                        <span class="user-meta">
+                            <span class="user-name" id="adminName">Loading…</span>
+                            <span class="user-role">Administrator</span>
+                        </span>
+                        <i class="bi bi-chevron-down ms-1" style="font-size:.72rem;"></i>
+                    </button>
+                    <ul class="dropdown-menu dropdown-menu-end">
+                        <li>
+                            <a class="dropdown-item" href="#">
+                                <i class="bi bi-person me-2"></i>Profile
+                            </a>
+                        </li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li>
+                            <a class="dropdown-item text-danger js-logout" href="#" role="button">
+                                <i class="bi bi-box-arrow-right me-2"></i>Sign out
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </header>
+
+        <div class="content-inner">
+
+            <!-- Page header -->
+            <div class="page-header">
+                <div>
+                    <h1>Customers</h1>
+                    <p class="page-desc">Search, edit, or update customer account statuses.</p>
+                </div>
+                <button class="btn btn-primary" onclick="openCreateModal()">
+                    <i class="bi bi-person-plus me-2"></i>New Customer
+                </button>
+            </div>
+
+            <!-- Table card -->
+            <div class="card table-card">
+
+                <div class="table-toolbar">
+                    <div class="search-wrap">
+                        <i class="bi bi-search"></i>
+                        <input
+                            type="text"
+                            class="form-control"
+                            id="searchInput"
+                            placeholder="Search by name or email…"
+                            autocomplete="off">
+                    </div>
+                    <div class="toolbar-actions">
+                        <button type="button" class="btn btn-ghost" onclick="loadCustomers()">
+                            <i class="bi bi-search me-1"></i>Search
+                        </button>
+                    </div>
+                </div>
+
+                <div class="table-responsive">
+                    <table class="table table-hover mb-0 align-middle">
+                        <thead>
+                            <tr>
+                                <th class="sortable">Code</th>
+                                <th class="sortable">Name</th>
+                                <th class="sortable">Email</th>
+                                <th>Phone</th>
+                                <th>Status</th>
+                                <th class="text-end">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="customerTableBody">
+                            <!-- Initial skeleton rows (replaced by JS on load) -->
+                            <tr><td colspan="6" class="text-center py-4">
+                                <div class="spinner-border text-primary" role="status" aria-hidden="true"></div>
+                                <p class="text-muted mt-2 mb-0" style="font-size:.875rem;">Loading customers…</p>
+                            </td></tr>
+                        </tbody>
+                    </table>
+                </div>
+
+            </div>
+
+        </div>
+
+        <footer class="app-footer">
+            <span>&copy; 2026 FTM System. All rights reserved.</span>
+            <span class="text-muted-2">v1.0 · Customers</span>
+        </footer>
+
+    </main>
 </div>
 
-<!-- Main Content -->
-<div class="main-content">
-    <div class="topbar">
-        <h5 class="m-0 fw-bold text-dark">Customer Management</h5>
-        <div class="d-flex align-items-center gap-3">
-            <span class="fw-semibold text-muted" id="adminName">Loading...</span>
-            <div class="avatar bg-primary text-white rounded-circle d-flex align-items-center justify-content-center fw-bold" style="width: 40px; height: 40px;">A</div>
-        </div>
-    </div>
-
-    <div class="container-fluid p-4">
-        <div class="d-flex justify-content-between align-items-center mb-4">
-            <h5 class="fw-bold m-0">All Customers</h5>
-            <button class="btn btn-primary fw-bold" onclick="openCreateModal()">
-                <i class="bi bi-person-plus me-2"></i> New Customer
-            </button>
-        </div>
-
-        <div class="stat-card mb-4 p-3">
-            <div class="input-group">
-                <span class="input-group-text bg-white border-end-0"><i class="bi bi-search text-muted"></i></span>
-                <input type="text" class="form-control border-start-0" id="searchInput" placeholder="Search by name or email...">
-                <button class="btn btn-outline-secondary" type="button" onclick="loadCustomers()">Search</button>
+<!-- ==================== Create / Edit modal ==================== -->
+<div class="modal fade" id="customerModal" tabindex="-1" aria-labelledby="modalTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalTitle">New Customer</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-        </div>
 
-        <div class="stat-card p-0 overflow-hidden">
-            <table class="table table-hover mb-0 align-middle">
-                <thead class="table-light">
-                    <tr>
-                        <th class="ps-4">Code</th>
-                        <th>Name</th>
-                        <th>Email</th>
-                        <th>Phone</th>
-                        <th>Status</th>
-                        <th class="text-end pe-4">Actions</th>
-                    </tr>
-                </thead>
-                <tbody id="customerTableBody">
-                    <tr><td colspan="6" class="text-center py-4 text-muted"><div class="spinner-border spinner-border-sm me-2"></div> Loading customers...</td></tr>
-                </tbody>
-            </table>
-        </div>
-    </div>
-</div>
-
-<!-- Create/Edit Customer Modal -->
-<div class="modal fade" id="customerModal" tabindex="-1">
-    <div class="modal-dialog">
-        <div class="modal-content border-0 shadow">
-            <div class="modal-header bg-light border-0">
-                <h5 class="modal-title fw-bold" id="modalTitle">New Customer</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-            </div>
-            <div class="modal-body p-4">
+            <div class="modal-body">
                 <input type="hidden" id="customerId">
+
                 <div class="row g-3">
                     <div class="col-md-6">
-                        <label class="form-label fw-semibold">First Name</label>
-                        <input type="text" class="form-control" id="firstName" required>
+                        <div class="form-floating">
+                            <input type="text" class="form-control" id="firstName" placeholder="First name" required>
+                            <label for="firstName">First name</label>
+                        </div>
                     </div>
                     <div class="col-md-6">
-                        <label class="form-label fw-semibold">Last Name</label>
-                        <input type="text" class="form-control" id="lastName" required>
+                        <div class="form-floating">
+                            <input type="text" class="form-control" id="lastName" placeholder="Last name" required>
+                            <label for="lastName">Last name</label>
+                        </div>
                     </div>
                     <div class="col-12">
-                        <label class="form-label fw-semibold">Email</label>
-                        <input type="email" class="form-control" id="email" required>
+                        <div class="form-floating">
+                            <input type="email" class="form-control" id="email" placeholder="Email" required>
+                            <label for="email">Email address</label>
+                        </div>
                     </div>
                     <div class="col-md-6">
-                        <label class="form-label fw-semibold">Phone</label>
-                        <input type="text" class="form-control" id="phoneNumber">
+                        <div class="form-floating">
+                            <input type="text" class="form-control" id="phoneNumber" placeholder="Phone">
+                            <label for="phoneNumber">Phone number</label>
+                        </div>
                     </div>
                     <div class="col-md-6">
-                        <label class="form-label fw-semibold">City</label>
-                        <input type="text" class="form-control" id="city">
+                        <div class="form-floating">
+                            <input type="text" class="form-control" id="city" placeholder="City">
+                            <label for="city">City</label>
+                        </div>
                     </div>
                 </div>
             </div>
-            <div class="modal-footer border-0 bg-light">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                <button type="button" class="btn btn-primary fw-bold" id="saveBtn" onclick="saveCustomer()">Save Customer</button>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-ghost" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-primary" id="saveBtn" onclick="saveCustomer()">
+                    Save Customer
+                </button>
             </div>
         </div>
     </div>
 </div>
 
+<!-- ==================== Confirm status change ==================== -->
+<div class="modal fade" id="confirmToggleModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Confirm status change</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+
+            <div class="modal-body text-center">
+                <div class="modal-confirm-icon" id="confirmIcon" style="margin: 0 auto 1rem;">
+                    <i class="bi bi-power"></i>
+                </div>
+                <p id="confirmMessage" class="mb-0 text-muted-2">Are you sure?</p>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-ghost" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-danger" id="confirmToggleBtn">Confirm</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ==================== Scripts ==================== -->
 <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 <script src="/js/app.js"></script>
